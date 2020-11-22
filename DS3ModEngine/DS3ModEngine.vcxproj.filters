@@ -43,6 +43,9 @@
     <Filter Include="Source Files\StackWalker">
       <UniqueIdentifier>{c413b239-df4e-491b-a4ab-9b43b5379d9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\RsaKeyPatcher">
+      <UniqueIdentifier>{011cdc85-4434-4e12-84e8-d001641799f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dinput8\dinput.h">
@@ -135,6 +138,9 @@
     <ClInclude Include="StackWalker\StackWalker.h">
       <Filter>Source Files\StackWalker</Filter>
     </ClInclude>
+    <ClInclude Include="RsaKeyPatcher.h">
+      <Filter>Source Files\RsaKeyPatcher</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="dinput8\dinput8.def">
@@ -210,6 +216,9 @@
     </ClCompile>
     <ClCompile Include="StackWalker\StackWalker.cpp">
       <Filter>Source Files\StackWalker</Filter>
+    </ClCompile>
+    <ClCompile Include="RsaKeyPatcher.cpp">
+      <Filter>Source Files\RsaKeyPatcher</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -47,7 +47,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <CLRSupport>false</CLRSupport>
@@ -151,6 +151,7 @@
     <ClInclude Include="MinHook\src\trampoline.h" />
     <ClInclude Include="ModLoader.h" />
     <ClInclude Include="NetworkBlocker.h" />
+    <ClInclude Include="RsaKeyPatcher.h" />
     <ClInclude Include="StackWalker\StackWalker.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
@@ -179,6 +180,7 @@
     <ClCompile Include="MinHook\src\trampoline.c" />
     <ClCompile Include="ModLoader.cpp" />
     <ClCompile Include="NetworkBlocker.cpp" />
+    <ClCompile Include="RsaKeyPatcher.cpp" />
     <ClCompile Include="StackWalker\StackWalker.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>

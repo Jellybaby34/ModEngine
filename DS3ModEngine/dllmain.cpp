@@ -124,6 +124,43 @@ BOOL ApplyPostUnpackHooks()
 		GetPrivateProfileStringW(L"files", L"modOverrideDirectory", L"\\doa", modOverrideDirectory, 500, L".\\modengine.ini");
 	}
 
+	bool blockNetworkAccess = (GetPrivateProfileIntW(L"online", L"blockNetworkAccess", 1, L".\\modengine.ini") == 1);
+	bool enablePrivateServer = (GetPrivateProfileIntW(L"online", L"enablePrivateServer", 0, L".\\modengine.ini") == 1);
+	wchar_t *privateServerIp;
+	wchar_t *rsaKeyFilePath;
+
+	if ((GetGameType() == GAME_DARKSOULS_3 && enablePrivateServer)) {
+		if (blockNetworkAccess) {
+			AllocConsole();
+			FILE* stream;
+			freopen_s(&stream, "CONOUT$", "w", stdout);
+			freopen_s(&stream, "CONIN$", "r", stdin);
+			printf("The private server ini option has been enabled but block network access is also enabled.");
+			printf("\r\nEither disable the private server option or the block network access option if you are trying to connect to an emulated server\r\n\r\nPress any key to continue...");
+			int temp;
+			std::cin.ignore();
+			FreeConsole();
+		}
+		else {
+			privateServerIp = (wchar_t*)calloc(21, sizeof(wchar_t));
+			if (privateServerIp != NULL) {
+				GetPrivateProfileStringW(L"online", L"privateServerIp", L"0.0.0.0", privateServerIp, 20, L".\\modengine.ini");
+			}
+
+			rsaKeyFilePath = (wchar_t*)calloc(501, sizeof(wchar_t));
+			if (rsaKeyFilePath != NULL) {
+				GetPrivateProfileStringW(L"online", L"rsaKeyFilePath", L"\\doa", rsaKeyFilePath, 500, L".\\modengine.ini");
+			}
+
+			if (PatchRSAKey(rsaKeyFilePath, privateServerIp)) {
+				wprintf(L"[Mod Engine] Successfully patched RSA key and server IP.\r\n");
+			} else {
+				wprintf(L"[Mod Engine] Patching RSA key and server IP failed. Terminating\r\n");
+				throw(0xDEAD00FF);
+			}
+		}
+	}
+
 	// Bypass HideThreadFromDebugger
 	if ((GetGameType() == GAME_DARKSOULS_3 || GetGameType() == GAME_DARKSOULS_2_SOTFS) && !BypassHideThreadFromDebugger())
 		throw(0xDEAD0002);
@@ -237,7 +274,7 @@ BOOL InitInstance(HMODULE hModule)
 	}
 
 	// Only hook steamapi on Sekiro
-	if (GetGameType() == GAME_SEKIRO || GetGameType() == GAME_DARKSOULS_3 || GetGameType() == GAME_DARKSOULS_REMASTERED || GetGameType() == GAME_DARKSOULS_2_SOTFS)
+	if (GetGameType() == GAME_SEKIRO)
 	{
 		auto steamApiHwnd = GetModuleHandleW(L"steam_api64.dll");
 		auto initAddr = GetProcAddress(steamApiHwnd, "SteamAPI_Init");
@@ -302,13 +339,16 @@ DWORD WINAPI MainThread(HMODULE hModule)
 
 		printf("Found window %s?\n", title);
 	}
+	else
+	{
+		ApplyPostUnpackHooks();
+	}
+
 	//bool s = ImplHookDX11_Init(hModule, FindWindowW(0, AppWindowTitle));
 	//if (!s)
 	//{
 	//	wprintf(L"Hooking failed\n");
 	//}
-
-	ApplyPostUnpackHooks();
 
 	return S_OK;
 }

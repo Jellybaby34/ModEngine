@@ -1,7 +1,6 @@
 #include "ModLoader.h"
 #include "Game.h"
 #include "AOBScanner.h"
-#include "LeoSpecial/LeoSpecial.h"
 #include <stdio.h>
 #include <wchar.h>
 #include <Shlwapi.h>
@@ -40,7 +39,6 @@ concurrency::concurrent_unordered_set<std::wstring> overrideSet;
 concurrency::concurrent_unordered_set<std::wstring> archiveSet;
 
 uintptr_t ArchiveVEHHookAddress = NULL;
-LeoHook ArchiveVEHHook;
 
 void* tVirtualToArchivePath(DLString *path, UINT64 p2, UINT64 p3, DLString *p4, UINT64 p5, UINT64 p6)
 {
